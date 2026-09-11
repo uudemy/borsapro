@@ -5,7 +5,7 @@ using Microsoft.UI.Xaml;
 
 namespace TradingApp.Desktop.WinUI
 {
-    public class WinUIApp : MauiWinUIApplication
+    public partial class WinUIApp : MauiWinUIApplication
     {
         public WinUIApp()
         {
