@@ -19,7 +19,13 @@ Projeyi bilgisayarınıza klonladıktan sonra aşağıdaki adımları sırasıyl
 - **Docker Desktop** (Veritabanını saniyeler içinde ayağa kaldırmak için en kolay yöntem)
 - Visual Studio 2022 (MAUI ve .NET Web workload'ları) veya Visual Studio Code
 
-### 2. Veritabanını Ayağa Kaldırma (Docker ile En Kolay Yöntem)
+### 2. Bağımlılıkları Yükleme ve Veritabanını Ayağa Kaldırma
+
+Projedeki gerekli NuGet paketlerini (BCrypt vb.) indirmek için öncelikle kök dizinde şu komutu çalıştırın:
+```bash
+dotnet restore
+```
+
 Projenizde karmaşık PostgreSQL kurulumlarıyla uğraşmamak için Docker kullanabilirsiniz. Proje dizininde yer alan `docker-compose.yml` dosyası, veritabanınızı tek komutla hazır hale getirir.
 
 Bilgisayarınızda Docker Desktop açıkken, terminalde projenin kök dizininde şu komutu çalıştırın:
