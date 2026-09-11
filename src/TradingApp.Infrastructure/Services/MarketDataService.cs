@@ -23,8 +23,8 @@ public class MarketDataService : IMarketDataService
         foreach (var asset in assets)
         {
             // Fiyatı rastgele % -2 ile +2 arasında değiştir
-            var changePercentage = (_random.NextDouble() * 4 - 2) / 100m;
-            var changeAmount = asset.CurrentPrice * (decimal)changePercentage;
+            var changePercentage = (decimal)(_random.NextDouble() * 4 - 2) / 100m;
+            var changeAmount = asset.CurrentPrice * changePercentage;
             
             asset.PreviousClose = asset.CurrentPrice;
             asset.CurrentPrice = Math.Round(asset.CurrentPrice + changeAmount, 2);
