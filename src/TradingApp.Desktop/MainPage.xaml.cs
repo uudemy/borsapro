@@ -37,10 +37,10 @@ public partial class MainPage : ContentPage
                 ResultLabel.Text = "Giriş Başarılı! Token alındı.";
                 
                 // Dashboard (Ana Ekran) sayfasına Token ile birlikte geçiş yap
-                if (Application.Current?.Windows.FirstOrDefault() is Window window)
+                MainThread.BeginInvokeOnMainThread(() =>
                 {
-                    window.Page = new NavigationPage(new DashboardPage(result?.Token ?? ""));
-                }
+                    Application.Current!.MainPage = new NavigationPage(new DashboardPage(result?.Token ?? ""));
+                });
             }
             else
             {

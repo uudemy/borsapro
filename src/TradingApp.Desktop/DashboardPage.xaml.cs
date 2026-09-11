@@ -155,10 +155,10 @@ public partial class DashboardPage : ContentPage
     private void OnLogoutClicked(object sender, EventArgs e)
     {
         // Login sayfasına geri dön
-        if (Application.Current?.Windows.FirstOrDefault() is Window window)
+        MainThread.BeginInvokeOnMainThread(() =>
         {
-            window.Page = new NavigationPage(new MainPage());
-        }
+            Application.Current!.MainPage = new NavigationPage(new MainPage());
+        });
     }
 }
 
