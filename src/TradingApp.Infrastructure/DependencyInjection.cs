@@ -20,8 +20,14 @@ public static class DependencyInjection
         services.AddScoped<IUserRepository, UserRepository>();
         services.AddScoped<IWalletRepository, WalletRepository>();
         services.AddScoped<IAssetRepository, AssetRepository>();
+        services.AddScoped<IOrderRepository, OrderRepository>();
+        services.AddScoped<IPortfolioPositionRepository, PortfolioPositionRepository>();
+        
         services.AddScoped<IUnitOfWork, UnitOfWork>();
         services.AddScoped<ITokenService, TokenService>();
+        services.AddScoped<IMarketDataService, MarketDataService>();
+
+        services.AddHostedService<MarketDataBackgroundService>();
 
         return services;
     }

@@ -22,4 +22,9 @@ public class AssetRepository : IAssetRepository
     {
         return await _context.Assets.FirstOrDefaultAsync(a => a.Symbol == symbol, cancellationToken);
     }
+
+    public async Task AddRangeAsync(IEnumerable<Asset> assets, CancellationToken cancellationToken = default)
+    {
+        await _context.Assets.AddRangeAsync(assets, cancellationToken);
+    }
 }
