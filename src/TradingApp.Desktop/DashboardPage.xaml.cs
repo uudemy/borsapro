@@ -30,6 +30,34 @@ public partial class DashboardPage : ContentPage
     {
         await LoadWalletBalance();
         await LoadPortfolio();
+        await LoadMarkets();
+    }
+
+    private async Task LoadMarkets()
+    {
+        try
+        {
+            var response = await _httpClient.GetAsync($"{ApiBaseUrl}/Asset");
+            if (response.IsSuccessStatusCode)
+            {
+                var assets = await response.Content.ReadFromJsonAsync<List<AssetDto>>(new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
+                MainThread.BeginInvokeOnMainThread(() => {
+                    MarketListView.ItemsSource = assets;
+                });
+            }
+        }
+        catch (Exception ex)
+        {
+            GlobalExceptionHandler.LogException(ex, "LoadMarkets");
+        }
+    }
+
+    private void OnAssetTapped(object sender, TappedEventArgs e)
+    {
+        if (e.Parameter is string symbol)
+        {
+            SymbolEntry.Text = symbol;
+        }
     }
 
     private async Task LoadWalletBalance()
@@ -199,4 +227,14 @@ public class PortfolioItemDto
 
     [JsonIgnore]
     public Color ProfitLossColor => ProfitLoss >= 0 ? Colors.LightGreen : Colors.IndianRed;
+}
+
+public class AssetDto
+{
+    public string Id { get; set; } = string.Empty;
+    public string Symbol { get; set; } = string.Empty;
+    public string Name { get; set; } = string.Empty;
+    public string AssetType { get; set; } = string.Empty;
+    public string Currency { get; set; } = string.Empty;
+    public decimal CurrentPrice { get; set; }
 }
