@@ -20,7 +20,7 @@ namespace TradingApp.Desktop
             };
         }
 
-        private static void LogException(Exception ex, string source)
+        public static void LogException(Exception ex, string source)
         {
             try
             {
