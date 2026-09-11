@@ -18,6 +18,8 @@ public static class DependencyInjection
                 b => b.MigrationsAssembly(typeof(TradingDbContext).Assembly.FullName)));
 
         services.AddScoped<IUserRepository, UserRepository>();
+        services.AddScoped<IWalletRepository, WalletRepository>();
+        services.AddScoped<IAssetRepository, AssetRepository>();
         services.AddScoped<IUnitOfWork, UnitOfWork>();
         services.AddScoped<ITokenService, TokenService>();
 
