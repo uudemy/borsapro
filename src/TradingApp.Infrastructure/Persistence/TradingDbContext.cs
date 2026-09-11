@@ -9,15 +9,15 @@ public class TradingDbContext : DbContext
     {
     }
 
-    public DbSet<User> Users { get; set; } => Set<User>();
-    public DbSet<Asset> Assets { get; set; } => Set<Asset>();
-    public DbSet<Wallet> Wallets { get; set; } => Set<Wallet>();
-    public DbSet<Order> Orders { get; set; } => Set<Order>();
-    public DbSet<Trade> Trades { get; set; } => Set<Trade>();
-    public DbSet<PortfolioPosition> PortfolioPositions { get; set; } => Set<PortfolioPosition>();
-    public DbSet<Watchlist> Watchlists { get; set; } => Set<Watchlist>();
-    public DbSet<PriceAlert> PriceAlerts { get; set; } => Set<PriceAlert>();
-    public DbSet<Notification> Notifications { get; set; } => Set<Notification>();
+    public DbSet<User> Users { get; set; }
+    public DbSet<Asset> Assets { get; set; }
+    public DbSet<Wallet> Wallets { get; set; }
+    public DbSet<Order> Orders { get; set; }
+    public DbSet<Trade> Trades { get; set; }
+    public DbSet<PortfolioPosition> PortfolioPositions { get; set; }
+    public DbSet<Watchlist> Watchlists { get; set; }
+    public DbSet<PriceAlert> PriceAlerts { get; set; }
+    public DbSet<Notification> Notifications { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
