@@ -1,16 +1,31 @@
-namespace TradingApp.Desktop;
-
-public static class Program
-{
-    // MAUI Uygulamasının giriş noktası
 #if WINDOWS
-    [global::System.STAThreadAttribute]
-    public static void Main(string[] args)
+using Microsoft.Maui;
+using Microsoft.Maui.Hosting;
+using Microsoft.UI.Xaml;
+
+namespace TradingApp.Desktop.WinUI
+{
+    public class WinUIApp : MauiWinUIApplication
     {
-        global::Microsoft.UI.Xaml.Application.Start((p) => {
-            var context = new global::Microsoft.Maui.Hosting.MauiWinUIApplication();
-            context.GetType().GetProperty("MauiProgram")?.SetValue(context, MauiProgram.CreateMauiApp());
-        });
+        public WinUIApp()
+        {
+        }
+
+        protected override MauiApp CreateMauiApp() => MauiProgram.CreateMauiApp();
     }
+}
 #endif
+
+namespace TradingApp.Desktop
+{
+    public static class Program
+    {
+#if WINDOWS
+        [global::System.STAThreadAttribute]
+        public static void Main(string[] args)
+        {
+            global::Microsoft.UI.Xaml.Application.Start((p) => new WinUI.WinUIApp());
+        }
+#endif
+    }
 }
