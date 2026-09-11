@@ -65,6 +65,11 @@ public partial class MainPage : ContentPage
             });
         }
     }
+
+    private async void OnRegisterNavClicked(object sender, EventArgs e)
+    {
+        await Navigation.PushAsync(new RegisterPage());
+    }
 }
 
 public class LoginResponse
