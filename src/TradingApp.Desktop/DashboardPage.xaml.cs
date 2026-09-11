@@ -42,12 +42,17 @@ public partial class DashboardPage : ContentPage
                 var content = await response.Content.ReadAsStringAsync();
                 using var document = JsonDocument.Parse(content);
                 var balance = document.RootElement.GetProperty("balance").GetDecimal();
-                BalanceLabel.Text = $"${balance:N2}";
+                MainThread.BeginInvokeOnMainThread(() => {
+                    BalanceLabel.Text = $"${balance:N2}";
+                });
             }
         }
-        catch (Exception)
+        catch (Exception ex)
         {
-            BalanceLabel.Text = "Hata";
+            GlobalExceptionHandler.LogException(ex, "LoadWalletBalance");
+            MainThread.BeginInvokeOnMainThread(() => {
+                BalanceLabel.Text = "Hata";
+            });
         }
     }
 
@@ -59,12 +64,14 @@ public partial class DashboardPage : ContentPage
             if (response.IsSuccessStatusCode)
             {
                 var portfolioItems = await response.Content.ReadFromJsonAsync<List<PortfolioItemDto>>(new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
-                PortfolioListView.ItemsSource = portfolioItems;
+                MainThread.BeginInvokeOnMainThread(() => {
+                    PortfolioListView.ItemsSource = portfolioItems;
+                });
             }
         }
-        catch (Exception)
+        catch (Exception ex)
         {
-            // Sessizce hatayı yut veya kullanıcıya göster
+            GlobalExceptionHandler.LogException(ex, "LoadPortfolio");
         }
     }
 
@@ -80,15 +87,19 @@ public partial class DashboardPage : ContentPage
 
     private async Task ExecuteTrade(int side)
     {
-        TradeResultLabel.Text = "İşlem yapılıyor...";
-        TradeResultLabel.TextColor = Colors.LightGray;
+        MainThread.BeginInvokeOnMainThread(() => {
+            TradeResultLabel.Text = "İşlem yapılıyor...";
+            TradeResultLabel.TextColor = Colors.LightGray;
+        });
 
         try
         {
             if (string.IsNullOrWhiteSpace(SymbolEntry.Text) || !decimal.TryParse(QuantityEntry.Text, out decimal qty))
             {
-                TradeResultLabel.Text = "Geçerli sembol ve miktar girin.";
-                TradeResultLabel.TextColor = Colors.IndianRed;
+                MainThread.BeginInvokeOnMainThread(() => {
+                    TradeResultLabel.Text = "Geçerli sembol ve miktar girin.";
+                    TradeResultLabel.TextColor = Colors.IndianRed;
+                });
                 return;
             }
 
@@ -103,27 +114,37 @@ public partial class DashboardPage : ContentPage
 
             if (response.IsSuccessStatusCode)
             {
-                TradeResultLabel.Text = side == 1 ? "Alım Başarılı!" : "Satış Başarılı!";
-                TradeResultLabel.TextColor = Colors.LightGreen;
+                MainThread.BeginInvokeOnMainThread(() => {
+                    TradeResultLabel.Text = side == 1 ? "Alım Başarılı!" : "Satış Başarılı!";
+                    TradeResultLabel.TextColor = Colors.LightGreen;
+                });
                 await LoadDashboardData(); // Bakiyeyi ve portföyü yenile
             }
             else
             {
                 var errorMsg = await response.Content.ReadAsStringAsync();
-                TradeResultLabel.Text = $"Hata: {errorMsg}";
-                TradeResultLabel.TextColor = Colors.IndianRed;
+                MainThread.BeginInvokeOnMainThread(() => {
+                    TradeResultLabel.Text = $"Hata: {errorMsg}";
+                    TradeResultLabel.TextColor = Colors.IndianRed;
+                });
             }
         }
         catch (Exception ex)
         {
-            TradeResultLabel.Text = "Bağlantı hatası.";
-            TradeResultLabel.TextColor = Colors.IndianRed;
+            GlobalExceptionHandler.LogException(ex, "ExecuteTrade");
+            MainThread.BeginInvokeOnMainThread(() => {
+                TradeResultLabel.Text = "Bağlantı hatası.";
+                TradeResultLabel.TextColor = Colors.IndianRed;
+            });
         }
     }
 
     private async void OnDepositClicked(object sender, EventArgs e)
     {
-        DepositResultLabel.Text = "";
+        MainThread.BeginInvokeOnMainThread(() => {
+            DepositResultLabel.Text = "";
+        });
+        
         try
         {
             if (decimal.TryParse(DepositEntry.Text, out decimal amount) && amount > 0)
@@ -133,17 +154,22 @@ public partial class DashboardPage : ContentPage
                 
                 if (response.IsSuccessStatusCode)
                 {
-                    DepositResultLabel.Text = "Başarılı!";
-                    DepositResultLabel.TextColor = Colors.LightGreen;
-                    DepositEntry.Text = "";
+                    MainThread.BeginInvokeOnMainThread(() => {
+                        DepositResultLabel.Text = "Başarılı!";
+                        DepositResultLabel.TextColor = Colors.LightGreen;
+                        DepositEntry.Text = "";
+                    });
                     await LoadWalletBalance();
                 }
             }
         }
-        catch
+        catch (Exception ex)
         {
-            DepositResultLabel.Text = "Hata";
-            DepositResultLabel.TextColor = Colors.IndianRed;
+            GlobalExceptionHandler.LogException(ex, "OnDepositClicked");
+            MainThread.BeginInvokeOnMainThread(() => {
+                DepositResultLabel.Text = "Hata";
+                DepositResultLabel.TextColor = Colors.IndianRed;
+            });
         }
     }
 
