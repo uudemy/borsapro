@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Serilog;
 // using TradingApp.Application; // To be added when Application extension is created
-// using TradingApp.Infrastructure; // To be added when Infrastructure extension is created
+using TradingApp.Infrastructure;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -16,7 +16,7 @@ builder.Host.UseSerilog();
 
 // 2. Add Layer Dependencies (DI)
 // builder.Services.AddApplicationServices(); // To be implemented in next phases
-// builder.Services.AddInfrastructureServices(builder.Configuration); // To be implemented in next phases
+builder.Services.AddInfrastructureServices(builder.Configuration);
 
 // 3. Add built-in services
 builder.Services.AddControllers();
