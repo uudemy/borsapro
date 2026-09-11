@@ -155,14 +155,17 @@ public partial class DashboardPage : ContentPage
     private void OnLogoutClicked(object sender, EventArgs e)
     {
         // Login sayfasına geri dön
-        Application.Current.MainPage = new NavigationPage(new MainPage());
+        if (Application.Current?.Windows.FirstOrDefault() is Window window)
+        {
+            window.Page = new NavigationPage(new MainPage());
+        }
     }
 }
 
 public class PortfolioItemDto
 {
-    public string AssetId { get; set; }
-    public string Symbol { get; set; }
+    public string AssetId { get; set; } = string.Empty;
+    public string Symbol { get; set; } = string.Empty;
     public decimal TotalQuantity { get; set; }
     public decimal AverageBuyPrice { get; set; }
     public decimal CurrentPrice { get; set; }
