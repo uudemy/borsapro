@@ -1,8 +1,40 @@
+# Node & Web
 node_modules/
 build/
 dist/
 coverage/
+
+# OS & Logs
 .DS_Store
 *.log
+
+# Environment variables
 .env*
 !.env.example
+
+# .NET / C#
+[Bb]in/
+[Oo]bj/
+
+# Visual Studio
+.vs/
+*.user
+*.suo
+*.sln.docstates
+
+# VS Code
+.vscode/
+
+# MAUI / Mobile Artifacts
+*.apk
+*.aab
+*.ipa
+*.app
+*.appx
+*.appxbundle
+*.msix
+*.msixbundle
+
+# Test results
+[Tt]est[Rr]esult*/
+[Bb]uild[Ll]og.*
