@@ -155,9 +155,9 @@ public partial class DashboardPage : ContentPage
     private void OnLogoutClicked(object sender, EventArgs e)
     {
         // Login sayfasına geri dön
-        MainThread.BeginInvokeOnMainThread(() =>
+        MainThread.BeginInvokeOnMainThread(async () =>
         {
-            Application.Current!.MainPage = new NavigationPage(new MainPage());
+            await Navigation.PopToRootAsync();
         });
     }
 }
