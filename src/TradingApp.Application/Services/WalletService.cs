@@ -19,12 +19,12 @@ public class WalletService : IWalletService
         var wallet = await _unitOfWork.Wallets.GetByUserIdAsync(userId, cancellationToken);
         if (wallet == null)
         {
-            wallet = new Wallet { UserId = userId, Balance = 0, Currency = "USD" };
+            wallet = new Wallet { UserId = userId, AvailableBalance = 0, LockedBalance = 0, Currency = "USD" };
             await _unitOfWork.Wallets.AddAsync(wallet, cancellationToken);
             await _unitOfWork.SaveChangesAsync(cancellationToken);
         }
 
-        return new WalletResponse { Id = wallet.Id, UserId = wallet.UserId, Balance = wallet.Balance, Currency = wallet.Currency };
+        return new WalletResponse { Id = wallet.Id, UserId = wallet.UserId, Balance = wallet.AvailableBalance, Currency = wallet.Currency };
     }
 
     public async Task<WalletResponse> DepositAsync(Guid userId, decimal amount, CancellationToken cancellationToken = default)
@@ -32,11 +32,11 @@ public class WalletService : IWalletService
         var wallet = await _unitOfWork.Wallets.GetByUserIdAsync(userId, cancellationToken);
         if (wallet == null)
         {
-            wallet = new Wallet { UserId = userId, Balance = 0, Currency = "USD" };
+            wallet = new Wallet { UserId = userId, AvailableBalance = 0, LockedBalance = 0, Currency = "USD" };
             await _unitOfWork.Wallets.AddAsync(wallet, cancellationToken);
         }
 
-        wallet.Balance += amount;
+        wallet.AvailableBalance += amount;
         
         if (wallet.Id != Guid.Empty)
         {
@@ -45,21 +45,21 @@ public class WalletService : IWalletService
         
         await _unitOfWork.SaveChangesAsync(cancellationToken);
 
-        return new WalletResponse { Id = wallet.Id, UserId = wallet.UserId, Balance = wallet.Balance, Currency = wallet.Currency };
+        return new WalletResponse { Id = wallet.Id, UserId = wallet.UserId, Balance = wallet.AvailableBalance, Currency = wallet.Currency };
     }
 
     public async Task<WalletResponse> WithdrawAsync(Guid userId, decimal amount, CancellationToken cancellationToken = default)
     {
         var wallet = await _unitOfWork.Wallets.GetByUserIdAsync(userId, cancellationToken);
-        if (wallet == null || wallet.Balance < amount)
+        if (wallet == null || wallet.AvailableBalance < amount)
         {
             throw new Exception("Insufficient funds. You cannot withdraw more than your current balance.");
         }
 
-        wallet.Balance -= amount;
+        wallet.AvailableBalance -= amount;
         _unitOfWork.Wallets.Update(wallet);
         await _unitOfWork.SaveChangesAsync(cancellationToken);
 
-        return new WalletResponse { Id = wallet.Id, UserId = wallet.UserId, Balance = wallet.Balance, Currency = wallet.Currency };
+        return new WalletResponse { Id = wallet.Id, UserId = wallet.UserId, Balance = wallet.AvailableBalance, Currency = wallet.Currency };
     }
 }
