@@ -35,6 +35,9 @@ public partial class MainPage : ContentPage
                 var result = await response.Content.ReadFromJsonAsync<LoginResponse>();
                 ResultLabel.TextColor = Colors.LightGreen;
                 ResultLabel.Text = "Giriş Başarılı! Token alındı.";
+                
+                // Dashboard (Ana Ekran) sayfasına Token ile birlikte geçiş yap
+                Application.Current.MainPage = new NavigationPage(new DashboardPage(result.Token));
             }
             else
             {

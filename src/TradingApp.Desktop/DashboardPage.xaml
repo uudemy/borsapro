@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="TradingApp.Desktop.DashboardPage"
+             BackgroundColor="#121212"
+             Title="Portföy ve Piyasalar">
+
+    <Grid RowDefinitions="Auto, *" ColumnDefinitions="2*, 1*">
+        
+        <!-- ÜST BİLGİ ALANI (CÜZDAN VE PROFİL) -->
+        <Frame Grid.Row="0" Grid.ColumnSpan="2" BackgroundColor="#1E1E24" BorderColor="Transparent" CornerRadius="0" Padding="20">
+            <Grid ColumnDefinitions="Auto, *, Auto, Auto">
+                <Label Text="🚀 PRO Borsa" FontSize="22" FontAttributes="Bold" TextColor="White" VerticalOptions="Center" />
+                
+                <HorizontalStackLayout Grid.Column="2" Spacing="10" VerticalOptions="Center" Margin="0,0,20,0">
+                    <Label Text="Cüzdan:" TextColor="#A0A0A0" VerticalOptions="Center"/>
+                    <Label x:Name="BalanceLabel" Text="$0.00" FontSize="20" FontAttributes="Bold" TextColor="#00C853" VerticalOptions="Center" />
+                </HorizontalStackLayout>
+                
+                <Button Grid.Column="3" Text="Çıkış Yap" Clicked="OnLogoutClicked" BackgroundColor="#FF4C4C" TextColor="White" CornerRadius="5" HeightRequest="40" Padding="15,0" />
+            </Grid>
+        </Frame>
+
+        <!-- SOL TARAF: PORTFÖYÜM -->
+        <ScrollView Grid.Row="1" Grid.Column="0" Padding="20">
+            <VerticalStackLayout Spacing="20">
+                <Label Text="Varlıklarım" FontSize="20" FontAttributes="Bold" TextColor="White" />
+                
+                <!-- PORTFÖY LİSTESİ -->
+                <CollectionView x:Name="PortfolioListView">
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate>
+                            <Frame BackgroundColor="#1E1E24" BorderColor="#2B2B36" CornerRadius="10" Padding="15" Margin="0,0,0,10">
+                                <Grid ColumnDefinitions="*, *, *">
+                                    <VerticalStackLayout Grid.Column="0">
+                                        <Label Text="{Binding Symbol}" FontSize="18" FontAttributes="Bold" TextColor="White" />
+                                        <Label Text="{Binding TotalQuantity, StringFormat='Miktar: {0:F4}'}" TextColor="#A0A0A0" FontSize="14" />
+                                    </VerticalStackLayout>
+
+                                    <VerticalStackLayout Grid.Column="1" HorizontalOptions="Center">
+                                        <Label Text="Ort. Maliyet" TextColor="#A0A0A0" FontSize="12" />
+                                        <Label Text="{Binding AverageBuyPrice, StringFormat='${0:F2}'}" TextColor="White" FontSize="16" />
+                                    </VerticalStackLayout>
+
+                                    <VerticalStackLayout Grid.Column="2" HorizontalOptions="End">
+                                        <Label Text="Kâr / Zarar" TextColor="#A0A0A0" FontSize="12" HorizontalOptions="End" />
+                                        <Label Text="{Binding ProfitLoss, StringFormat='${0:F2}'}" TextColor="{Binding ProfitLossColor}" FontSize="16" FontAttributes="Bold" HorizontalOptions="End" />
+                                    </VerticalStackLayout>
+                                </Grid>
+                            </Frame>
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                </CollectionView>
+
+            </VerticalStackLayout>
+        </ScrollView>
+
+        <!-- SAĞ TARAF: PİYASA VE AL/SAT -->
+        <Frame Grid.Row="1" Grid.Column="1" BackgroundColor="#19191F" BorderColor="#2B2B36" CornerRadius="15" Margin="0,20,20,20" Padding="20">
+            <VerticalStackLayout Spacing="15">
+                <Label Text="Hızlı İşlem (Market)" FontSize="18" FontAttributes="Bold" TextColor="White" />
+                
+                <Entry x:Name="SymbolEntry" Placeholder="Sembol (Örn: BTC)" TextColor="White" BackgroundColor="#2B2B36" PlaceholderColor="#A0A0A0" />
+                <Entry x:Name="QuantityEntry" Placeholder="Miktar (Örn: 0.5)" Keyboard="Numeric" TextColor="White" BackgroundColor="#2B2B36" PlaceholderColor="#A0A0A0" />
+                
+                <Grid ColumnDefinitions="*, *" ColumnSpacing="10" Margin="0,10,0,0">
+                    <Button Grid.Column="0" Text="AL (BUY)" Clicked="OnBuyClicked" BackgroundColor="#00C853" TextColor="White" FontAttributes="Bold" CornerRadius="8" />
+                    <Button Grid.Column="1" Text="SAT (SELL)" Clicked="OnSellClicked" BackgroundColor="#FF4C4C" TextColor="White" FontAttributes="Bold" CornerRadius="8" />
+                </Grid>
+                
+                <Label x:Name="TradeResultLabel" TextColor="LightGreen" HorizontalOptions="Center" Margin="0,10,0,0" />
+
+                <!-- AYIRICI -->
+                <BoxView HeightRequest="1" Color="#2B2B36" Margin="0,20" />
+                
+                <!-- BAKIYE YUKLEME -->
+                <Label Text="Cüzdana Para Yükle" FontSize="16" FontAttributes="Bold" TextColor="White" />
+                <Grid ColumnDefinitions="*, Auto" ColumnSpacing="10">
+                    <Entry x:Name="DepositEntry" Grid.Column="0" Placeholder="Miktar ($)" Keyboard="Numeric" TextColor="White" BackgroundColor="#2B2B36" PlaceholderColor="#A0A0A0" />
+                    <Button Grid.Column="1" Text="Yükle" Clicked="OnDepositClicked" BackgroundColor="#007BFF" TextColor="White" CornerRadius="5" />
+                </Grid>
+                <Label x:Name="DepositResultLabel" TextColor="LightGreen" HorizontalOptions="Center" Margin="0,5,0,0" />
+                
+                <Button Text="Verileri Yenile (Refresh)" Clicked="OnRefreshClicked" BackgroundColor="#333333" TextColor="White" CornerRadius="5" Margin="0,20,0,0"/>
+
+            </VerticalStackLayout>
+        </Frame>
+    </Grid>
+</ContentPage>
