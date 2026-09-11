@@ -9,6 +9,7 @@ namespace TradingApp.Desktop.WinUI
     {
         public WinUIApp()
         {
+            this.InitializeComponent();
         }
 
         protected override MauiApp CreateMauiApp() => MauiProgram.CreateMauiApp();
