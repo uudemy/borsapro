@@ -20,6 +20,8 @@ public partial class RegisterPage : ContentPage
         RegisterButton.IsEnabled = false;
         ResultLabel.Text = "Kayıt olunuyor...";
         ResultLabel.TextColor = Colors.LightGray;
+        
+        bool isSuccess = false;
 
         try
         {
@@ -32,6 +34,7 @@ public partial class RegisterPage : ContentPage
                 {
                     ResultLabel.TextColor = Colors.IndianRed;
                     ResultLabel.Text = "Lütfen tüm alanları doldurun.";
+                    RegisterButton.IsEnabled = true;
                 });
                 return;
             }
@@ -48,12 +51,18 @@ public partial class RegisterPage : ContentPage
 
             if (response.IsSuccessStatusCode)
             {
-                MainThread.BeginInvokeOnMainThread(async () =>
+                isSuccess = true;
+                MainThread.BeginInvokeOnMainThread(() =>
                 {
                     ResultLabel.TextColor = Colors.LightGreen;
                     ResultLabel.Text = "Kayıt Başarılı! Yönlendiriliyorsunuz...";
-                    await Task.Delay(1500); // Kullanıcıya başarılı mesajını göstermek için kısa bekleme
-                    await Navigation.PopAsync(); // Giriş sayfasına geri dön
+                });
+                
+                await Task.Delay(1500); // 1.5 saniye bekle
+                
+                MainThread.BeginInvokeOnMainThread(async () =>
+                {
+                    await Navigation.PopAsync(); // Sayfayı kapat
                 });
             }
             else
@@ -77,10 +86,15 @@ public partial class RegisterPage : ContentPage
         }
         finally
         {
-            MainThread.BeginInvokeOnMainThread(() =>
+            // Yalnızca kayıt başarısız olduysa butonu tekrar aktif et.
+            // Başarılı olduysa sayfa zaten kapanıyor, butona dokunmak çökertir.
+            if (!isSuccess)
             {
-                RegisterButton.IsEnabled = true;
-            });
+                MainThread.BeginInvokeOnMainThread(() =>
+                {
+                    RegisterButton.IsEnabled = true;
+                });
+            }
         }
     }
 
